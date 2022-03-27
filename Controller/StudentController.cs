@@ -31,7 +31,7 @@ namespace StudentManagementSystem2.Controller
             return Ok(student);
 
         }
-        [HttpGet("matricNo")]
+        [HttpGet()]
         public async Task<ActionResult<Student>> Get(string matricNo)
         {
             Console.WriteLine("Get Request Triggered");

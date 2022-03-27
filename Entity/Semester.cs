@@ -1,6 +1,7 @@
 ﻿using StudentManagementSystem2.CustomAttributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace StudentManagementSystem2.Entity
         public List<Course> Courses { get; set; } = new List<Course>();
         public int CGPA { get; set; }
         public int GPA { get; set; }
+        [Range(100,500)]
         public int Level { set; get; }
 
         [SemesterAttribute]

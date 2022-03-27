@@ -13,6 +13,7 @@ namespace StudentManagementSystem2.Entity
         public Profiles()
         {
             CreateMap<CreateStudent,Student>();
+            CreateMap<Student, ReturnStudent>();
         }
     }
 }
