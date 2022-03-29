@@ -32,10 +32,11 @@ namespace StudentManagementSystem2.Entity
         public string ModeOfEntry { get; set; }
         [Required]
         public string MatricNo { get; set; }
-        
-        public IFormFile Passport { get; set; }
+        [FileExtensions(Extensions = ("jpg,jpeg"))]
+        public byte[] ByteArrayofPassport { get; set; }// = new byte[2097152];
 
-        //public int CGPA { get; set; }
+        //public string Email { get; set; }
+        //public string Password { get; set }
 
         public List<Session> Sessions { get; set; } = new List<Session>();
 

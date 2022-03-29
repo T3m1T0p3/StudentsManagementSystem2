@@ -11,7 +11,7 @@ namespace StudentManagementSystem2.Repositories
     public interface IStudentRepository
     {
         void CreateStudent(Student student);
-        Task<Student> GetStudent(Guid guid);
-        Task<Student> GetStudent(string matricNo);
+        Task<Student> GetStudentAsync(Guid guid);
+        Task<Student> GetStudentAsync(string matricNo);
     }
 }

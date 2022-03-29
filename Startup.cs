@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using StudentManagementSystem2.Helper;
 
 namespace StudentManagementSystem2
 {
@@ -37,6 +38,7 @@ namespace StudentManagementSystem2
             });*/
             services.AddDbContext<StudentContext>();
             services.AddScoped<IStudentRepository,StudentRepository>();
+            services.AddScoped<IConvertFileToByteArray, ConvertFileToByteArray>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 

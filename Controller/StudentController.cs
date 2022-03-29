@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementSystem2.DTO;
 using StudentManagementSystem2.Entity;
+using StudentManagementSystem2.Helper;
 //using StudentManagementSystem2.Model;
 using StudentManagementSystem2.Repositories;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,27 +21,71 @@ namespace StudentManagementSystem2.Controller
     {
         IStudentRepository _student;
         IMapper _mapper;
-        public StudentController(IMapper mapper, IStudentRepository context)
+        IConvertFileToByteArray _fileConverter;
+        public StudentController(IMapper mapper, IStudentRepository context,IConvertFileToByteArray converter)
         {
             _student = context;
             _mapper = mapper;
+            _fileConverter = converter;
         }
-        [HttpGet("guid:guid",Name ="GetStudent")]
-        public async Task<ActionResult<Student>> Get(Guid guid)
+        [HttpGet]
+        public IActionResult Gett()
+        {
+            return Ok("Hello");
+        }
+
+        [HttpGet("{guid:guid}",Name ="GetStudent")]
+        public async Task<ActionResult<Student>> Get([FromRoute]Guid guid)
         {
             Console.WriteLine("Get Request Triggered");
-            Student student = await _student.GetStudent(guid);
-            return Ok(student);
+            Student student;
+            try
+            {
+                student = await _student.GetStudentAsync(guid);
+                IFormFile passport=null;
+                Console.WriteLine("condition1");
+                
+                if (student.ByteArrayofPassport!=null)
+                {
+                    passport = new FormFile(new MemoryStream(student.ByteArrayofPassport), 0, student.ByteArrayofPassport.Length, "ByteArrayOfPassport","Passport");
+                    
+                }
+                
+                ReturnStudent returnStudent = _mapper.Map<ReturnStudent>(student);
+                returnStudent.Passport = passport;
+                return Ok(returnStudent);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            
 
         }
-        [HttpGet()]
-        public async Task<ActionResult<Student>> Get(string matricNo)
+        [HttpGet("{matricNo}")]
+        public async Task<ActionResult<Student>> Get([FromRoute]string matricNo)
         {
             Console.WriteLine("Get Request Triggered");
-            Student student = await _student.GetStudent(matricNo);
-            return Ok(student);
-
+            Student student;
+            IFormFile passport=null;
+            try
+            {
+                student = await _student.GetStudentAsync(matricNo);
+                if (student.ByteArrayofPassport!=null)
+                {
+                    passport = new FormFile(new MemoryStream(student.ByteArrayofPassport), 0, student.ByteArrayofPassport.Length, "ByteArrayOfPassport", "passport");
+                }
+                ReturnStudent returnStudent = _mapper.Map<ReturnStudent>(student);
+                returnStudent.Passport = passport;
+                return Ok(returnStudent);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
+
         [HttpPost("create")]
         public IActionResult CreateStudent([FromBody]CreateStudent student)
         {
@@ -46,18 +93,25 @@ namespace StudentManagementSystem2.Controller
             Student newStudent;
             try
             {
-                Console.WriteLine($"{student.FirstName}");
+                
+                var passport = _fileConverter.Convert(student.Passport);
                 newStudent = _mapper.Map<Student>(student);
+                newStudent.ByteArrayofPassport = passport;
                 _student.CreateStudent(newStudent);
-
+                return CreatedAtRoute("GetStudent", new { guid = newStudent.StudentId }, newStudent);
             }
             catch(Exception e)
             {
                 return BadRequest($"{e.Message}");
             }
-            return CreatedAtRoute("GetStudent",new { guid = newStudent.StudentId },newStudent);
-
+            
+            
         }
+        //[HttpPost("/upload/passport")]
+        //public IActionResult UploadPassport( [FromBody] IFormFile file )
+        //{
+          //  return Ok();
+        //}
     }
 }
 /*curl -X POST -H "Content-Type:application/json" http://localhost:5000/api/student/create -d

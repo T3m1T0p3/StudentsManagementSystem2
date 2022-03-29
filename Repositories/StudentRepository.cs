@@ -35,7 +35,7 @@ namespace StudentManagementSystem2.Repositories
             }
         }
 
-        public async Task<Student> GetStudent(Guid guid)
+        public async Task<Student> GetStudentAsync(Guid guid)
         {
             Student student = await _context.Students.FindAsync(guid);
             if (student == null)
@@ -45,14 +45,14 @@ namespace StudentManagementSystem2.Repositories
             return student;
         }
 
-        public async Task<Student> GetStudent(string matricNo)
+        public async Task<Student> GetStudentAsync(string matricNo)
         {
-            Student student =await  _context.Students.FindAsync(matricNo);
-            if (student == null)
+            var student = _context.Students.Where(s => s.MatricNo == matricNo).ToList();
+            if (student.Count()<1)
             {
                 throw new Exception("Account Not found");
             }
-            return student;
+            return student.FirstOrDefault();
         }
     }
 }
