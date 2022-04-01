@@ -10,8 +10,8 @@ using StudentManagementSystem2.StudentContexts;
 namespace StudentManagementSystem2.Migrations
 {
     [DbContext(typeof(StudentContext))]
-    [Migration("20220328024338_init2")]
-    partial class init2
+    [Migration("20220401154114_init4")]
+    partial class init4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,8 +106,14 @@ namespace StudentManagementSystem2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte[]>("ByteArrayofPassport")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -129,8 +135,8 @@ namespace StudentManagementSystem2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Passport")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()

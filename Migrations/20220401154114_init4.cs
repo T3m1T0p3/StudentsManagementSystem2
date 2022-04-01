@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StudentManagementSystem2.Migrations
 {
-    public partial class init : Migration
+    public partial class init4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,7 +20,10 @@ namespace StudentManagementSystem2.Migrations
                     HomeAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     YearofAdmission = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModeOfEntry = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MatricNo = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    MatricNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ByteArrayofPassport = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

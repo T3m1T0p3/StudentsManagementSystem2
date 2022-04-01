@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StudentManagementSystem2.Authentication;
 using StudentManagementSystem2.DTO;
 using StudentManagementSystem2.Entity;
 using StudentManagementSystem2.Helper;
@@ -10,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,16 +25,40 @@ namespace StudentManagementSystem2.Controller
         IStudentRepository _student;
         IMapper _mapper;
         IConvertFileToByteArray _fileConverter;
-        public StudentController(IMapper mapper, IStudentRepository context,IConvertFileToByteArray converter)
+        IAuthenticate _authenticate;
+        public StudentController(IMapper mapper, IStudentRepository context,IConvertFileToByteArray converter,IAuthenticate authenticate)
         {
             _student = context;
             _mapper = mapper;
             _fileConverter = converter;
+            _authenticate = authenticate;
         }
-        [HttpGet]
-        public IActionResult Gett()
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromQuery]string matricNo, [FromQuery] string password)
         {
-            return Ok("Hello");
+            Student student;
+            try
+            {
+                
+                student = await _student.GetStudentAsync(matricNo);
+            }
+            catch (Exception e)
+            {
+                return Ok(e.Message);
+            }
+            if (!_authenticate.AuthenticateUser(student.Password, password))
+            {
+                return Ok("Incorrect Username or Password");
+            }
+            var http = new HttpClient();
+            http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_authenticate.GenerateToken(matricNo));
+            return Ok(http);
+
+
+            //return Ok(CreatedAtRoute("GetStudent", new { guid = student.StudentId }, student));
+
+            //CreatedAtRoute("GetStudent", new { guid = student.StudentId }, student);
+
         }
 
         [HttpGet("{guid:guid}",Name ="GetStudent")]
@@ -43,7 +70,6 @@ namespace StudentManagementSystem2.Controller
             {
                 student = await _student.GetStudentAsync(guid);
                 IFormFile passport=null;
-                Console.WriteLine("condition1");
                 
                 if (student.ByteArrayofPassport!=null)
                 {
@@ -63,8 +89,8 @@ namespace StudentManagementSystem2.Controller
             
 
         }
-        [HttpGet("{matricNo}")]
-        public async Task<ActionResult<Student>> Get([FromRoute]string matricNo)
+        [HttpGet("matricNo",Name ="GetStudentUsingMatricNo")]
+        public async Task<ActionResult<Student>> Get([FromQuery]string matricNo)
         {
             Console.WriteLine("Get Request Triggered");
             Student student;
@@ -86,19 +112,24 @@ namespace StudentManagementSystem2.Controller
             }
         }
 
-        [HttpPost("create")]
-        public IActionResult CreateStudent([FromBody]CreateStudent student)
+        [HttpPost("register")]
+        public IActionResult CreateStudent([FromForm]CreateStudent student)
         {
             Console.WriteLine("Post Request Triggered");
             Student newStudent;
+            if (student == null) return Ok();
             try
-            {
-                
+            { 
+                Console.WriteLine("processing matricNo");
+                student.MatricNo=student.MatricNo.Replace('/','-');
+                Console.WriteLine("Generating Password Hash");
+                student.Password = _authenticate.GenerateHash(student.Password);
+                Console.WriteLine("Processing Passport");
                 var passport = _fileConverter.Convert(student.Passport);
                 newStudent = _mapper.Map<Student>(student);
                 newStudent.ByteArrayofPassport = passport;
                 _student.CreateStudent(newStudent);
-                return CreatedAtRoute("GetStudent", new { guid = newStudent.StudentId }, newStudent);
+                return CreatedAtRoute("GetStudentUsingMatricNo", new { matricNo = newStudent.MatricNo }, newStudent);
             }
             catch(Exception e)
             {

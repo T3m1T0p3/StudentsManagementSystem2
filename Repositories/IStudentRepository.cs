@@ -13,5 +13,6 @@ namespace StudentManagementSystem2.Repositories
         void CreateStudent(Student student);
         Task<Student> GetStudentAsync(Guid guid);
         Task<Student> GetStudentAsync(string matricNo);
+        //Student GetStudentUsingUsername(string username);
     }
 }

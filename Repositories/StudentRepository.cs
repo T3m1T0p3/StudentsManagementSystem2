@@ -17,8 +17,8 @@ namespace StudentManagementSystem2.Repositories
         }
         public void CreateStudent(Student student)
         {
-            var oldStudent = from s in _context.Students where s.MatricNo==student.MatricNo select s;
-            if (oldStudent.Count() != 0)
+            var oldStudent = _context.Students.SingleOrDefault(s=>s.MatricNo==student.MatricNo);
+            if (oldStudent != null)
             {
                 throw new Exception("Account alredy exists, log in to your account");
             }
@@ -47,12 +47,23 @@ namespace StudentManagementSystem2.Repositories
 
         public async Task<Student> GetStudentAsync(string matricNo)
         {
-            var student = _context.Students.Where(s => s.MatricNo == matricNo).ToList();
-            if (student.Count()<1)
+            var student = _context.Students.SingleOrDefault(s => s.MatricNo == matricNo);
+            if (student==null)
             {
-                throw new Exception("Account Not found");
+                throw new Exception("Invalid User");
             }
-            return student.FirstOrDefault();
+            return student;
         }
+
+        /*public Student GetStudentUsingUsername(string username)
+        {
+            Student student = _context.Students.SingleOrDefault(s => s.Username == username);
+            if (student == null)
+            {
+                throw new Exception("Inalid Username or Password");
+
+            }
+            return student;
+        }*/
     }
 }

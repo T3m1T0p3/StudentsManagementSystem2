@@ -29,5 +29,7 @@ namespace StudentManagementSystem2.DTO
         [Required]
         public string MatricNo { get; set; }
         public IFormFile Passport { get; set; }
+        [Required]
+        public string Password { get; set; }
     }
 }
