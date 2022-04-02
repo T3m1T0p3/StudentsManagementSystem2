@@ -16,6 +16,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using StudentManagementSystem2.Helper;
 using StudentManagementSystem2.Authentication;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace StudentManagementSystem2
 {
@@ -42,6 +46,17 @@ namespace StudentManagementSystem2
             services.AddScoped<IConvertFileToByteArray, ConvertFileToByteArray>();
             services.AddScoped<IAuthenticate, Authenticate>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("abcdefghijklmnop"))
+                };
+            });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

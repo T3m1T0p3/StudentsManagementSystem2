@@ -42,6 +42,7 @@ namespace StudentManagementSystem2.Repositories
             {
                 throw new Exception("Account Not found");
             }
+            Console.WriteLine(student.FirstName);
             return student;
         }
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementSystem2.Authentication;
+using StudentManagementSystem2.CustomAttributes;
 using StudentManagementSystem2.DTO;
 using StudentManagementSystem2.Entity;
 using StudentManagementSystem2.Helper;
@@ -33,36 +34,31 @@ namespace StudentManagementSystem2.Controller
             _fileConverter = converter;
             _authenticate = authenticate;
         }
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromQuery]string matricNo, [FromQuery] string password)
+        [HttpGet("login")]
+        [Password]
+        public async Task<IActionResult> Login([FromQuery] LoginCredential credential)
         {
+            Console.WriteLine("Login Request Triggered");
             Student student;
             try
             {
                 
-                student = await _student.GetStudentAsync(matricNo);
+                student = await _student.GetStudentAsync(credential.MatricNo);
+                if (!_authenticate.AuthenticateUser(student.Password, credential.Password))
+                {
+                    return Unauthorized("Incorrect Username or Password");
+                }
+                var token=_authenticate.GenerateToken(credential.MatricNo);
+                return Ok(token);
             }
             catch (Exception e)
             {
-                return Ok(e.Message);
+                return Unauthorized("Incorrect Login Credentials");
             }
-            if (!_authenticate.AuthenticateUser(student.Password, password))
-            {
-                return Ok("Incorrect Username or Password");
-            }
-            var http = new HttpClient();
-            http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_authenticate.GenerateToken(matricNo));
-            return Ok(http);
-
-
-            //return Ok(CreatedAtRoute("GetStudent", new { guid = student.StudentId }, student));
-
-            //CreatedAtRoute("GetStudent", new { guid = student.StudentId }, student);
-
         }
 
         [HttpGet("{guid:guid}",Name ="GetStudent")]
-        public async Task<ActionResult<Student>> Get([FromRoute]Guid guid)
+        public async Task<ActionResult<ReturnStudent>> Get([FromRoute]Guid guid)
         {
             Console.WriteLine("Get Request Triggered");
             Student student;
@@ -71,14 +67,16 @@ namespace StudentManagementSystem2.Controller
                 student = await _student.GetStudentAsync(guid);
                 IFormFile passport=null;
                 
-                if (student.ByteArrayofPassport!=null)
+                if (student.ByteArrayofPassport.Length>1000)
                 {
                     passport = new FormFile(new MemoryStream(student.ByteArrayofPassport), 0, student.ByteArrayofPassport.Length, "ByteArrayOfPassport","Passport");
                     
                 }
-                
+      
                 ReturnStudent returnStudent = _mapper.Map<ReturnStudent>(student);
+                Console.WriteLine("forming passport");
                 returnStudent.Passport = passport;
+                Console.WriteLine("Returning");
                 return Ok(returnStudent);
             }
             catch(Exception e)
@@ -89,8 +87,8 @@ namespace StudentManagementSystem2.Controller
             
 
         }
-        [HttpGet("matricNo",Name ="GetStudentUsingMatricNo")]
-        public async Task<ActionResult<Student>> Get([FromQuery]string matricNo)
+        [HttpGet(Name ="GetStudentUsingMatricNo")]
+        public async Task<ActionResult<ReturnStudent>> Get([FromQuery]string matricNo)
         {
             Console.WriteLine("Get Request Triggered");
             Student student;
@@ -98,12 +96,16 @@ namespace StudentManagementSystem2.Controller
             try
             {
                 student = await _student.GetStudentAsync(matricNo);
-                if (student.ByteArrayofPassport!=null)
+                if (student.ByteArrayofPassport.Length>1000)
                 {
+                    Console.WriteLine("Initializing formfile");
                     passport = new FormFile(new MemoryStream(student.ByteArrayofPassport), 0, student.ByteArrayofPassport.Length, "ByteArrayOfPassport", "passport");
+                    Console.WriteLine("FormFile created successfully");
                 }
                 ReturnStudent returnStudent = _mapper.Map<ReturnStudent>(student);
+                Console.WriteLine("Assigning passport");
                 returnStudent.Passport = passport;
+                Console.WriteLine("Returning");
                 return Ok(returnStudent);
             }
             catch (Exception e)
@@ -120,8 +122,7 @@ namespace StudentManagementSystem2.Controller
             if (student == null) return Ok();
             try
             { 
-                Console.WriteLine("processing matricNo");
-                student.MatricNo=student.MatricNo.Replace('/','-');
+               
                 Console.WriteLine("Generating Password Hash");
                 student.Password = _authenticate.GenerateHash(student.Password);
                 Console.WriteLine("Processing Passport");

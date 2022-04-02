@@ -33,9 +33,7 @@ namespace StudentManagementSystem2.Authentication
             return hash;
         }
         public bool AuthenticateUser(string hash, string password)
-        {
-            
-            
+        { 
             if (CompareHash(hash, password))
             {
                 return true;
@@ -45,25 +43,30 @@ namespace StudentManagementSystem2.Authentication
 
         public bool CompareHash(string hash,string password)
         {
-            if (BCryptNet.Verify(hash, password))
+            Console.WriteLine("Comparing HASH");
+            if (BCryptNet.Verify(password, hash)) 
              {
+                Console.WriteLine("Returning true");
                 return true;
              }
             return false;
         }
-        private readonly byte[] secret = Encoding.ASCII.GetBytes("ourlittlesecret");
+        private readonly byte[] secret = Encoding.ASCII.GetBytes("abcdefghijklmnop");
         public string GenerateToken(string matricNo)
         {
+            Console.WriteLine("Generating Token");
             var tokenHandler=new JwtSecurityTokenHandler();
             var now = DateTime.Now;
+            Console.WriteLine("Creating Token Descriptor");
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, matricNo) }),
                 Expires = now.AddMinutes(10),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.Aes256Encryption)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256)
             };
-
+            Console.WriteLine("Creating Security Token");
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+            Console.WriteLine("Writing Token");
             var token = tokenHandler.WriteToken(securityToken);
             return token;
         }
