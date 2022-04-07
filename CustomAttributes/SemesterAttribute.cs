@@ -21,8 +21,5 @@ namespace StudentManagementSystem2.CustomAttributes
 
             return ValidationResult.Success;
         }
-
     }
-
-
 }

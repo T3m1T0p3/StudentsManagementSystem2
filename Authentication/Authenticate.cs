@@ -22,12 +22,11 @@ namespace StudentManagementSystem2.Authentication
         }
         public string GenerateHash(string password)
         {
-            Console.WriteLine("Generating hash");
+
             if (password==null || password.Length<8 || password.Length > 12)
             {
                 throw new Exception("Pasword must between between 8 and 12 characters");
             }
-            Console.WriteLine("Generating hash");
             string hash=BCryptNet.HashPassword(password);
             Console.WriteLine(hash);
             return hash;
@@ -43,10 +42,9 @@ namespace StudentManagementSystem2.Authentication
 
         public bool CompareHash(string hash,string password)
         {
-            Console.WriteLine("Comparing HASH");
+
             if (BCryptNet.Verify(password, hash)) 
              {
-                Console.WriteLine("Returning true");
                 return true;
              }
             return false;
@@ -54,19 +52,15 @@ namespace StudentManagementSystem2.Authentication
         private readonly byte[] secret = Encoding.ASCII.GetBytes("abcdefghijklmnop");
         public string GenerateToken(string matricNo)
         {
-            Console.WriteLine("Generating Token");
             var tokenHandler=new JwtSecurityTokenHandler();
-            var now = DateTime.Now;
-            Console.WriteLine("Creating Token Descriptor");
+            
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, matricNo) }),
-                Expires = now.AddMinutes(10),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256)
+                Expires =DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256Signature)
             };
-            Console.WriteLine("Creating Security Token");
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);
-            Console.WriteLine("Writing Token");
             var token = tokenHandler.WriteToken(securityToken);
             return token;
         }

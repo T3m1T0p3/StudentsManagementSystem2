@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementSystem2.Authentication;
@@ -21,6 +23,7 @@ namespace StudentManagementSystem2.Controller
 {
     [ApiController]
     [Route("api/student")]
+    
     public class StudentController:ControllerBase
     {
         IStudentRepository _student;
@@ -36,9 +39,9 @@ namespace StudentManagementSystem2.Controller
         }
         [HttpGet("login")]
         [Password]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromQuery] LoginCredential credential)
         {
-            Console.WriteLine("Login Request Triggered");
             Student student;
             try
             {
@@ -49,95 +52,82 @@ namespace StudentManagementSystem2.Controller
                     return Unauthorized("Incorrect Username or Password");
                 }
                 var token=_authenticate.GenerateToken(credential.MatricNo);
-                return Ok(token);
+                return Ok(new { Token = token });
             }
             catch (Exception e)
             {
-                return Unauthorized("Incorrect Login Credentials");
+                return Unauthorized(e.Message);
             }
         }
 
         [HttpGet("{guid:guid}",Name ="GetStudent")]
         public async Task<ActionResult<ReturnStudent>> Get([FromRoute]Guid guid)
         {
-            Console.WriteLine("Get Request Triggered");
             Student student;
             try
             {
                 student = await _student.GetStudentAsync(guid);
                 IFormFile passport=null;
                 
-                if (student.ByteArrayofPassport.Length>1000)
+                if (student.ByteArrayofPassport.Length>1000)//CONDTION NEEDS FIXING
                 {
                     passport = new FormFile(new MemoryStream(student.ByteArrayofPassport), 0, student.ByteArrayofPassport.Length, "ByteArrayOfPassport","Passport");
                     
                 }
       
                 ReturnStudent returnStudent = _mapper.Map<ReturnStudent>(student);
-                Console.WriteLine("forming passport");
                 returnStudent.Passport = passport;
-                Console.WriteLine("Returning");
                 return Ok(returnStudent);
             }
-            catch(Exception e)
+            catch(Exception )
             {
-                return BadRequest(e.Message);
+                return NotFound("Ensure guid is correct");
             }
-
-            
-
         }
-        [HttpGet(Name ="GetStudentUsingMatricNo")]
+        
+        [HttpGet("matricNo",Name ="GetStudentUsingMatricNo")]
+        [Authorize()]
         public async Task<ActionResult<ReturnStudent>> Get([FromQuery]string matricNo)
         {
-            Console.WriteLine("Get Request Triggered");
+            Console.WriteLine("GetReq");
             Student student;
             IFormFile passport=null;
             try
             {
                 student = await _student.GetStudentAsync(matricNo);
+                Console.WriteLine(student.FirstName);
                 if (student.ByteArrayofPassport.Length>1000)
                 {
-                    Console.WriteLine("Initializing formfile");
                     passport = new FormFile(new MemoryStream(student.ByteArrayofPassport), 0, student.ByteArrayofPassport.Length, "ByteArrayOfPassport", "passport");
-                    Console.WriteLine("FormFile created successfully");
                 }
                 ReturnStudent returnStudent = _mapper.Map<ReturnStudent>(student);
-                Console.WriteLine("Assigning passport");
                 returnStudent.Passport = passport;
-                Console.WriteLine("Returning");
                 return Ok(returnStudent);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return Ok(e.Message);
             }
         }
 
         [HttpPost("register")]
         public IActionResult CreateStudent([FromForm]CreateStudent student)
         {
-            Console.WriteLine("Post Request Triggered");
             Student newStudent;
-            if (student == null) return Ok();
+            if (student == null) return BadRequest();
             try
             { 
-               
-                Console.WriteLine("Generating Password Hash");
                 student.Password = _authenticate.GenerateHash(student.Password);
-                Console.WriteLine("Processing Passport");
                 var passport = _fileConverter.Convert(student.Passport);
                 newStudent = _mapper.Map<Student>(student);
                 newStudent.ByteArrayofPassport = passport;
                 _student.CreateStudent(newStudent);
                 return CreatedAtRoute("GetStudentUsingMatricNo", new { matricNo = newStudent.MatricNo }, newStudent);
             }
-            catch(Exception e)
+            catch(Exception )
             {
-                return BadRequest($"{e.Message}");
-            }
-            
-            
+                return BadRequest("Ensure all Required parameters are included in Request");
+            } 
         }
         //[HttpPost("/upload/passport")]
         //public IActionResult UploadPassport( [FromBody] IFormFile file )

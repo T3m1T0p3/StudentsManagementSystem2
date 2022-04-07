@@ -19,9 +19,7 @@ namespace StudentManagementSystem2.StudentContexts
               .SetBasePath(Directory.GetCurrentDirectory())
               .AddJsonFile("appsettings.json")
               .Build();
-
             return new StudentContext(new DbContextOptionsBuilder<StudentContext>().Options, config);
         }
-
     }
 }
