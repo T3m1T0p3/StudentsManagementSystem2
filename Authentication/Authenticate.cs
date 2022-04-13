@@ -1,24 +1,24 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Crypto.Generators;
-using StudentManagementSystem2.Entity;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Identity;
+using Microsoft.IdentityModel.Tokens;
+using StudentManagementSystem2.DTO;
 using StudentManagementSystem2.StudentContexts;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using BCryptNet = BCrypt.Net.BCrypt;
-
+using Microsoft.Extensions.DependencyInjection;
 
 namespace StudentManagementSystem2.Authentication
 {
     public class Authenticate: IAuthenticate
     {
+        //private StudentContext _context;
         public Authenticate()
         {
-            //_context = context;
+           // _context = context;
         }
         public string GenerateHash(string password)
         {

@@ -16,6 +16,7 @@ namespace StudentManagementSystem2.Entity
         {
             CreateMap<CreateStudent,Student>() ;
             CreateMap<Student, ReturnStudent>().ForMember(dest=>dest.Name,src=>src.MapFrom(x=>$"{x.FirstName} {x.MiddleName} {x.Surname}"));
+            CreateMap<CreateCourse, Course>();
         }
     }
 }

@@ -12,9 +12,9 @@ namespace StudentManagementSystem2.CustomAttributes
     {
         protected override ValidationResult IsValid(object option, ValidationContext context)
         {
-            var semester = (string)context.ObjectInstance;
+            var semester = (int)context.ObjectInstance;
 
-            if (semester != "first" || semester != "second")
+            if (semester != 1 || semester != 2)
             {
                 return new ValidationResult("Semester may either be firsts or second");
             }

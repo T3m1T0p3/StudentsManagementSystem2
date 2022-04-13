@@ -20,7 +20,7 @@ namespace StudentManagementSystem2.StudentContexts
 
         public StudentContext() { }
 
-        public StudentContext(DbContextOptions option, IConfiguration config):base(option)
+        public StudentContext(DbContextOptions<StudentContext> option, IConfiguration config):base(option)
         {
             _config = config;
         }

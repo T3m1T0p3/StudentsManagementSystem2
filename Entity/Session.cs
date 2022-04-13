@@ -8,8 +8,9 @@ namespace StudentManagementSystem2.Entity
 {
     public class Session
     {
-        public int SessionId { get; set; }
+        public Guid SessionId { get; set; }
         public Guid StudentId { get; set; }
+        public int SessionNumber { get; set; }
         public List<Semester> Semesters = new List<Semester>();
     }
 }

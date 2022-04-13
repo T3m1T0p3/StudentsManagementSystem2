@@ -44,6 +44,8 @@ namespace StudentManagementSystem2
             });*/
             services.AddDbContext<StudentContext>();
             services.AddScoped<IStudentRepository,StudentRepository>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<StudentContext>();
             services.AddScoped<IConvertFileToByteArray, ConvertFileToByteArray>();
             services.AddScoped<IAuthenticate, Authenticate>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

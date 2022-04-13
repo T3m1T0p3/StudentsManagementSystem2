@@ -10,16 +10,16 @@ namespace StudentManagementSystem2.Entity
 {
     public class Semester
     {
-        public int SemesterId { get; set; }
-        public int SessionId { get; set; }
+        public Guid SemesterId { get; set; }
+        public Guid SessionId { get; set; }
         public List<Course> Courses { get; set; } = new List<Course>();
         public int CGPA { get; set; }
         public int GPA { get; set; }
         [Range(100,500)]
         public int Level { set; get; }
 
-        [SemesterAttribute]
-        public string semester { get; set; }
+        [Semester]
+        public int SemesterNumber { get; set; }
       
     }
 }

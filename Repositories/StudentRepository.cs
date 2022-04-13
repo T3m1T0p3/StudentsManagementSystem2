@@ -1,4 +1,5 @@
-﻿using StudentManagementSystem2.Entity;
+﻿using StudentManagementSystem2.DTO;
+using StudentManagementSystem2.Entity;
 using StudentManagementSystem2.StudentContexts;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,35 @@ namespace StudentManagementSystem2.Repositories
         public StudentRepository(StudentContext context)
         {
             _context = context;
+        }
+
+        public bool StudentExists(Guid studentId)
+        {
+            Student student;
+            try
+            {
+                student = _context.Students.SingleOrDefault(s =>  s.StudentId == studentId);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            if (student is null) return false;
+            return true;
+        }
+        public bool StudentExists(string matricNo)
+        {
+            Student student;
+            try
+            {
+                student = _context.Students.SingleOrDefault(s => s.MatricNo == matricNo);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            if (student is null) return false;
+            return true;
         }
         public void CreateStudent(Student student)
         {
@@ -48,23 +78,12 @@ namespace StudentManagementSystem2.Repositories
 
         public async Task<Student> GetStudentAsync(string matricNo)
         {
-            var student = _context.Students.SingleOrDefault(s => s.MatricNo == matricNo);
+            var student =  _context.Students.SingleOrDefault(s => s.MatricNo == matricNo);
             if (student==null)
             {
                 throw new Exception("Invalid User");
             }
             return student;
         }
-
-        /*public Student GetStudentUsingUsername(string username)
-        {
-            Student student = _context.Students.SingleOrDefault(s => s.Username == username);
-            if (student == null)
-            {
-                throw new Exception("Inalid Username or Password");
-
-            }
-            return student;
-        }*/
     }
 }

@@ -18,6 +18,7 @@ namespace StudentManagementSystem2.Entity
         public string CourseCode { get; set; }
         public char Grade { get; set; }
         public int Score { get; set; }
+        public string Status { get; set; }
 
     }
 }

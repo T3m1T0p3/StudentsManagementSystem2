@@ -11,5 +11,7 @@ namespace StudentManagementSystem2.DTO
         public string MatricNo { get; set; }
         public string CourseTitle { get; set; }
         public string CourseCode { get; set; }
+        public int SessionNumber { get; set; }
+        public int SemesterNumber { get; set; }
     }
 }

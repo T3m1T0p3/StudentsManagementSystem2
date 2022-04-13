@@ -10,8 +10,8 @@ using StudentManagementSystem2.StudentContexts;
 namespace StudentManagementSystem2.Migrations
 {
     [DbContext(typeof(StudentContext))]
-    [Migration("20220401154114_init4")]
-    partial class init4
+    [Migration("20220412201008_init5")]
+    partial class init5
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,22 +44,27 @@ namespace StudentManagementSystem2.Migrations
                     b.Property<int>("SemesterId")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("SemesterId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("CourseId");
 
-                    b.HasIndex("SemesterId");
+                    b.HasIndex("SemesterId1");
 
                     b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("StudentManagementSystem2.Entity.Semester", b =>
                 {
-                    b.Property<int>("SemesterId")
+                    b.Property<Guid>("SemesterId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CGPA")
                         .HasColumnType("int");
@@ -70,11 +75,11 @@ namespace StudentManagementSystem2.Migrations
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
-                    b.Property<int>("SessionId")
+                    b.Property<int>("SemesterNumber")
                         .HasColumnType("int");
 
-                    b.Property<string>("semester")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("SemesterId");
 
@@ -85,10 +90,12 @@ namespace StudentManagementSystem2.Migrations
 
             modelBuilder.Entity("StudentManagementSystem2.Entity.Session", b =>
                 {
-                    b.Property<int>("SessionId")
+                    b.Property<Guid>("SessionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SessionNumber")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
@@ -158,9 +165,7 @@ namespace StudentManagementSystem2.Migrations
                 {
                     b.HasOne("StudentManagementSystem2.Entity.Semester", null)
                         .WithMany("Courses")
-                        .HasForeignKey("SemesterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SemesterId1");
                 });
 
             modelBuilder.Entity("StudentManagementSystem2.Entity.Semester", b =>

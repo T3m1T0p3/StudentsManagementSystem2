@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StudentManagementSystem2.Migrations
 {
-    public partial class init4 : Migration
+    public partial class init5 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,9 +34,9 @@ namespace StudentManagementSystem2.Migrations
                 name: "Sessions",
                 columns: table => new
                 {
-                    SessionId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SessionNumber = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,13 +53,12 @@ namespace StudentManagementSystem2.Migrations
                 name: "Semesters",
                 columns: table => new
                 {
-                    SemesterId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SessionId = table.Column<int>(type: "int", nullable: false),
+                    SemesterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CGPA = table.Column<int>(type: "int", nullable: false),
                     GPA = table.Column<int>(type: "int", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
-                    semester = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SemesterNumber = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,23 +82,25 @@ namespace StudentManagementSystem2.Migrations
                     CourseTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CourseCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Grade = table.Column<string>(type: "nvarchar(1)", nullable: false),
-                    Score = table.Column<int>(type: "int", nullable: false)
+                    Score = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SemesterId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Courses", x => x.CourseId);
                     table.ForeignKey(
-                        name: "FK_Courses_Semesters_SemesterId",
-                        column: x => x.SemesterId,
+                        name: "FK_Courses_Semesters_SemesterId1",
+                        column: x => x.SemesterId1,
                         principalTable: "Semesters",
                         principalColumn: "SemesterId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_SemesterId",
+                name: "IX_Courses_SemesterId1",
                 table: "Courses",
-                column: "SemesterId");
+                column: "SemesterId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Semesters_SessionId",
