@@ -32,5 +32,7 @@ namespace StudentManagementSystem2.DTO
         public IFormFile Passport { get; set; }
         [Required]
         public string Password { get; set; }
+        [Required]
+        public string Email { get; set; }
     }
 }

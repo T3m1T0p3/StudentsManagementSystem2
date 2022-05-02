@@ -2,7 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <StartupObject>StudentManagementSystem2.Program</StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Properties\StudentManagementSystem2.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />

@@ -38,10 +38,10 @@ namespace StudentManagementSystem2
         {
 
             services.AddControllers();
-            /*services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "StudentManagementSystem2", Version = "v1" });
-            });*/
+            });
             services.AddDbContext<StudentContext>();
             services.AddScoped<IStudentRepository,StudentRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
@@ -84,8 +84,8 @@ namespace StudentManagementSystem2
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseSwagger();
-                ///app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "StudentManagementSystem2 v1"));
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "StudentManagementSystem2 v1"));
             }
 
             //app.UseHttpsRedirection();

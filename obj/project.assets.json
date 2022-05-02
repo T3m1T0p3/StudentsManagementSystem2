@@ -6545,8 +6545,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Oyinlola\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Oyinlola\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -6557,12 +6556,8 @@
       "packagesPath": "C:\\Users\\Oyinlola\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Oyinlola\\source\\repos\\StudentManagementSystem2\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
         "C:\\Users\\Oyinlola\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

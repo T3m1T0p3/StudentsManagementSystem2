@@ -118,13 +118,13 @@ namespace StudentManagementSystem2.Repositories
             courses = GetCourse(createCourse.CourseCode, student.StudentId);
             foreach (Course course in courses)
             {
-                if (course.Status == "Passed" || course.Status == "Registered")
+                if (course.Status == CourseStatus.Passed || course.Status == CourseStatus.InProgress)
                 {
                     throw new Exception("Cannot Add course. Course is either in progress or has been cleared by specified student");
                 }
             }
             Course cours = _mapper.Map<Course>(createCourse);
-            cours.Status = "Registered";
+            cours.Status = CourseStatus.InProgress;
             semester.Courses.Add(cours);
             _context.SaveChanges();
             return;
