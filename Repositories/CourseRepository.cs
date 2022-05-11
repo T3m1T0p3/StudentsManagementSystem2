@@ -128,7 +128,7 @@ namespace StudentManagementSystem2.Repositories
             semester.Courses.Add(cours);
             _context.SaveChanges();
             return;
-            //student.C
+            
         }
 
         public IEnumerable<Course> GetCourse(string courseCode, Guid studentId)
