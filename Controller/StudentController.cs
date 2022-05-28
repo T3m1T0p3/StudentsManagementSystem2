@@ -32,6 +32,7 @@ namespace StudentManagementSystem2.Controller
         IAuthenticate _authenticate;
         public StudentController(IMapper mapper, IStudentRepository context,IConvertFileToByteArray converter,IAuthenticate authenticate)
         {
+            Console.WriteLine("StudentController");
             _student = context;
             _mapper = mapper;
             _fileConverter = converter;
@@ -86,7 +87,7 @@ namespace StudentManagementSystem2.Controller
         }
         
         [HttpGet("matricNo",Name ="GetStudentUsingMatricNo")]
-        [Authorize()]
+        //[Authorize()]
         public async Task<ActionResult<ReturnStudent>> Get([FromQuery]string matricNo)
         {
             Console.WriteLine("GetReq");

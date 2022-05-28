@@ -4,7 +4,7 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-    <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
+    <ActiveDebugProfile>StudentManagementSystem2</ActiveDebugProfile>
     <ShowAllFiles>false</ShowAllFiles>
     <NameOfLastUsedPublishProfile>C:\Users\Oyinlola\source\repos\StudentManagementSystem2\Properties\PublishProfiles\FolderProfile.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>

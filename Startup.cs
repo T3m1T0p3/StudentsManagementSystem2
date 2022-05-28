@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using System.Reflection;
 
 namespace StudentManagementSystem2
 {
@@ -28,11 +29,13 @@ namespace StudentManagementSystem2
     {
         public Startup(IConfiguration configuration)
         {
+
+            Console.WriteLine("Startup");
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
-
+        public static string assemblyName=typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -49,7 +52,13 @@ namespace StudentManagementSystem2
             services.AddScoped<IConvertFileToByteArray, ConvertFileToByteArray>();
             services.AddScoped<IAuthenticate, Authenticate>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddAuthentication(x=>
+           services.AddAuthentication("Bearer").AddIdentityServerAuthentication("Bearer", options =>
+            {
+                options.ApiName = "StudentManagementSystemAPI";
+                options.Authority = "http://localhost:5003";
+            });
+            
+            /*services.AddAuthentication(x=>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -75,9 +84,9 @@ namespace StudentManagementSystem2
                     defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
 
                 options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
-            });
+            });*/
         }
-
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -85,15 +94,13 @@ namespace StudentManagementSystem2
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "StudentManagementSystem2 v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "StudentManagementSystem2"));
             }
 
             //app.UseHttpsRedirection();
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

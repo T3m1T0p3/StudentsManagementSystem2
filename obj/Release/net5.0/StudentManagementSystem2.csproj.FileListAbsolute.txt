@@ -70,3 +70,7 @@ C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Release\net5.0\Stude
 C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Release\net5.0\ref\StudentManagementSystem2.dll
 C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Release\net5.0\StudentManagementSystem2.pdb
 C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Release\net5.0\StudentManagementSystem2.genruntimeconfig.cache
+C:\Users\Oyinlola\source\repos\StudentManagementSystem2\bin\Release\net5.0\IdentityModel.dll
+C:\Users\Oyinlola\source\repos\StudentManagementSystem2\bin\Release\net5.0\IdentityModel.AspNetCore.OAuth2Introspection.dll
+C:\Users\Oyinlola\source\repos\StudentManagementSystem2\bin\Release\net5.0\IdentityServer4.AccessTokenValidation.dll
+C:\Users\Oyinlola\source\repos\StudentManagementSystem2\bin\Release\net5.0\Newtonsoft.Json.dll
