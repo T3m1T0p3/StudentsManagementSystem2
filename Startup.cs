@@ -55,7 +55,8 @@ namespace StudentManagementSystem2
            services.AddAuthentication("Bearer").AddIdentityServerAuthentication("Bearer", options =>
             {
                 options.ApiName = "StudentManagementSystemAPI";
-                options.Authority = "http://localhost:5003";
+                options.Authority = "http://localhost:5002";
+                options.RequireHttpsMetadata = false;
             });
             
             /*services.AddAuthentication(x=>

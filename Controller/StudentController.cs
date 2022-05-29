@@ -87,7 +87,7 @@ namespace StudentManagementSystem2.Controller
         }
         
         [HttpGet("matricNo",Name ="GetStudentUsingMatricNo")]
-        //[Authorize()]
+        [Authorize()]
         public async Task<ActionResult<ReturnStudent>> Get([FromQuery]string matricNo)
         {
             Console.WriteLine("GetReq");

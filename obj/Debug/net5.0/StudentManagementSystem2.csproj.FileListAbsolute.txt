@@ -65,7 +65,12 @@ C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Debug\net5.0\Student
 C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Debug\net5.0\scopedcss\bundle\StudentManagementSystem2.styles.css
 C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Debug\net5.0\staticwebassets\StudentManagementSystem2.StaticWebAssets.Manifest.cache
 C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Debug\net5.0\StudentManagementSystem2.RazorTargetAssemblyInfo.cache
-C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Debug\net5.0\StudentManagementSystem2.csproj.CopyComplete
 C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Debug\net5.0\StudentManagementSystem2.dll
 C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Debug\net5.0\ref\StudentManagementSystem2.dll
 C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Debug\net5.0\StudentManagementSystem2.pdb
+C:\Users\Oyinlola\source\repos\StudentManagementSystem2\bin\Debug\net5.0\StudentManagementSystem2.deps.json
+C:\Users\Oyinlola\source\repos\StudentManagementSystem2\bin\Debug\net5.0\StudentManagementSystem2.runtimeconfig.json
+C:\Users\Oyinlola\source\repos\StudentManagementSystem2\bin\Debug\net5.0\StudentManagementSystem2.runtimeconfig.dev.json
+C:\Users\Oyinlola\source\repos\StudentManagementSystem2\bin\Debug\net5.0\ref\StudentManagementSystem2.dll
+C:\Users\Oyinlola\source\repos\StudentManagementSystem2\bin\Debug\net5.0\StudentManagementSystem2.pdb
+C:\Users\Oyinlola\source\repos\StudentManagementSystem2\obj\Debug\net5.0\StudentManagementSystem2.genruntimeconfig.cache
